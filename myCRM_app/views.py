@@ -1,6 +1,7 @@
 from myCRM_app.models import *
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 import datetime as dt
+import json
 
 def home(request):
     logged_user = User.objects.get(id=request.session["userid"])
@@ -15,7 +16,6 @@ def home(request):
 
 def search(request):
     request.session['customer'] = None
-    print(request.session['customer'])
     logged_user = User.objects.get(id=request.session["userid"])
 
     if request.method == "POST":
@@ -26,6 +26,20 @@ def search(request):
         else:
             return redirect('/customer/register')
     return redirect('/customer')
+
+def autocomplete_model(request):
+    if request.method == "GET":
+        q = request.GET.get('term', '').capitalize()
+        search_qs = Customer.objects.filter(email__startswith=q)
+        results = []
+        for r in search_qs[0:10]:
+            results.append(r.email)
+
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
 def register(request):
     logged_user = User.objects.get(id=request.session["userid"])
@@ -69,13 +83,15 @@ def edit_customer_info(request, customer_id):
     logged_user = User.objects.get(id=request.session["userid"])
     customer_id = customer_id
     customer_to_edit = Customer.objects.get(id = customer_id)
+    print(request.POST['birthday'])
     
     if request.method == "POST":
         customer_to_edit.first_name = request.POST["first_name"]
-        customer_to_edit.last_name = request.POST["last_name"],
-        customer_to_edit.phone_number = request.POST["phone_number"],
-        customer_to_edit.email = request.POST["email"],
-        customer_to_edit.birthday = dt.datetime.strptime(request.POST["birthday"], "%m/%d/%Y")
+        customer_to_edit.last_name = request.POST["last_name"]
+        customer_to_edit.phone_number = request.POST["phone_number"]
+        customer_to_edit.email = request.POST["email"]
+        customer_to_edit.birthday = request.POST["birthday"]
+        customer_to_edit.save()
 
         return redirect(f'/customer/info/{customer_id}')
 

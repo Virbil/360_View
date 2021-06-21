@@ -107,11 +107,11 @@
                                             <span class="input-group-text">Birthday: </span>
                                         </div>
                                         <div class="form-group col-8 date">
-                                            <input type="text" id="birthday" name="birthday" class="form-control" value="{{ customer.birthday }}">
+                                            <input type="date" id="birthday" name="birthday" class="form-control" value="{{ customer.birthday| date:'Y-m-d' }}">
                                         </div>
                                     </div>
                                     <button class="btn btn-primary register" type="submit">Edit Customer</button>
-                                    <button class="btn btn-danger" type="submit"><a href="/customer" style="text-decoration: none; color: inherit;">Cancel</a></button>
+                                    <button class="btn btn-danger" type="submit"><a href="/customer/info/{{ customer.id }}" style="text-decoration: none; color: inherit;">Cancel</a></button>
                                 </form>
                             </div>
                         </div>
@@ -130,17 +130,6 @@
         feather.replace()
 
         $(document).ready(function () {
-            $('#editCustInfoModal').on('show.bs.modal', function (e) {
-                var date_input=$('input[name="birthday"]');
-                var container=$('.date form').length>0 ? $('.date form').parent() : "body";
-                var options={
-                    format: 'mm/dd/yyyy',
-                    container: container,
-                    todayHighlight: true,
-                    autoclose: true,
-                };
-                date_input.datepicker(options);
-            })
 
             $('#home_flush').click(function() {
                 // how to clear request.session['customer']?
