@@ -10,4 +10,5 @@ urlpatterns = [
     path('post-note', views.post_note),
     path('contact-history', views.contact_history),
     path('order-history', views.order_history),
+    path('place-order', views.place_order),
 ]

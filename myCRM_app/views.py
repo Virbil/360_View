@@ -27,9 +27,16 @@ def search(request):
     return redirect('/customer')
 
 def register(request):
-    return render(request, "add-customer.html")
+    logged_user = User.objects.get(id=request.session["userid"])
+
+    context = {
+        "user_info": logged_user
+    }
+
+    return render(request, "add-customer.html", context)
 
 def add(request):
+
     if request.method == "POST":
     # errors = User.objects.reg_validator(request.POST)
 
@@ -52,17 +59,19 @@ def customer_info(request, customer_id):
     customer_id = customer_id
     context = {
         'user_info': logged_user,
-        'customer': Customer.objects.get(id=customer_id)
+        'customer': Customer.objects.get(id=customer_id),
+        'orders': Order.objects.filter(customer = customer_id)
     }
     return render(request, 'cust-info.html', context)
 
 def contact_history(request):
     logged_user = User.objects.get(id=request.session["userid"])
-    customer = request.session["customer"]
+    customer = Customer.objects.get(id=request.session["customer"])
+    print(customer)
     context = {
         'user_info': logged_user,
-        'customer': Customer.objects.get(id=customer),
-        'notes': Note.objects.filter(user=logged_user)
+        'customer': Customer.objects.get(id=request.session["customer"]),
+        'notes': Note.objects.filter(customer=customer)
     }
     return render(request, 'contact-history.html', context)
 
@@ -80,10 +89,34 @@ def post_note(request):
 def order_history(request):
     logged_user = User.objects.get(id=request.session["userid"])
     customer = request.session["customer"]
-    print(customer)
+    all_products = Product.objects.all()
     context = {
         'user_info': logged_user,
         'customer': Customer.objects.get(id=customer),
+        'products': all_products,
         'orders': Order.objects.filter(customer=customer)
     }
     return render(request, 'order-history.html', context)
+
+def place_order(request):
+    customer = Customer.objects.get(id=request.session["customer"])
+    products = request.POST.getlist('products')
+
+    if request.method == "GET":
+        logged_user = User.objects.get(id=request.session["userid"])
+        customer = request.session["customer"]
+        all_products = Product.objects.all()
+        context = {
+            'user_info': logged_user,
+            'customer': Customer.objects.get(id=customer),
+            'products': all_products
+        }
+        return render(request, 'place-order.html', context)
+
+    if request.method == "POST":
+        new_order = Order.objects.create(
+            customer = customer
+        )
+        for product in products:
+            new_order.products.add(Product.objects.get(id=product))
+        return redirect('/customer/order-history')

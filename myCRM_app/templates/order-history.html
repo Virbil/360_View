@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
-    <title>CRM Home</title>
+    <title>360&deg; View</title>
 </head>
 <body class="text-center d-flex flex-column min-vh-100" style="padding-top: 3.5rem;">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -32,7 +33,7 @@
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar text-left">
                 <div class="sidebar-sticky">
-                    <ul class="nav flex-column">
+                    <ul class="nav flex-column mt-5">
                         <li class="nav-item">
                             <a class="nav-link active" href="/customer">
                                 <span data-feather="users"></span>
@@ -55,6 +56,12 @@
                             <a class="nav-link" href="/customer/order-history">
                                 <span data-feather="shopping-cart"></span>
                                 Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/customer/place-order">
+                                <span data-feather="tag"></span>
+                                Place New Order
                             </a>
                         </li>
                         <!-- <li class="nav-item">
@@ -108,33 +115,27 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div class="jumbotron h2">
-                        <h1 class="cover-heading">Welcome, Agent {{ user_info.first_name }}</h1>
+                    <h1 class="cover-heading">Welcome, Agent {{ user_info.last_name }}</h1>
                 </div>
 
-                {% for order in orders reversed %}
-                <div class="container">
-                    <h1 class="lead">Order History</h1>         
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3 class="float-left">{{ order.customer.first_name }} {{ order.customer.last_name }} - {{ order.updated_at }}</h3>
-                        </div>
-                    </div>
-                    {% for product in order.products.all %}
-                    <div class="container m-5">
-                        <div class="card" style="width: 18rem;">
-                            <img src="..." class="card-img-top" alt="...">
+                <h1 class="lead">Order History for {{ customer.first_name }}</h1>
+                <div class="row row-cols-1 row-cols-md-3 text-center">
+                    {% for order in orders reversed %}
+                    <div class="card mb-4 rounded-3 ">
+                        <div class="card m-2">
+                            <!-- https://loremflickr.com/320/240/clothes -->
+                            <img src="{% static 'img/crew_t.webp' %}" class="card-img-top" alt="crew neck t-shirt">
+                            <h5 class="card-title mt-2">Order Number: {{order.id}}</h5>
+                            {% for product in order.products.all %}
                             <div class="card-body">
-                                <h5 class="card-title">Order Number: {{order.id}}</h5>
                                 <p class="card-text">{{ product.product_name }} for ${{ product.price }}</p>
                                 <p class="card-text">{{ product.description }}</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                     {% endfor %}
-                </div>
-                {% endfor %}
-                
+                </div>                
             </main>
         </div>
     </div>
@@ -158,6 +159,8 @@
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
         feather.replace()
+
+        $("input[name='products']:checked").val()
     </script>
 
 </body>
