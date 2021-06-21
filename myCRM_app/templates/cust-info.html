@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Customer Info Update by Logged in Contact Agent">
+    <meta name="author" content="b.eaton">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!--  jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -14,104 +30,11 @@
     <title>360&deg; View</title>
 </head>
 <body class="text-center d-flex flex-column min-vh-100" style="padding-top: 3.5rem;">
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="/customer">360&deg; View</a>
-
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    {% include "top-nav.html" %}
 
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar text-left">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column mt-5">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/customer">
-                                <span data-feather="users"></span>
-                                Customer Search
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/info/{{customer.id}}">
-                                <span data-feather="home"></span>
-                                Customer Information <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/contact-history">
-                                <span data-feather="file"></span>
-                                Contact History
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/order-history">
-                                <span data-feather="shopping-cart"></span>
-                                Orders
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/order-history">
-                                <span data-feather="tag"></span>
-                                Place New Order
-                            </a>
-                        </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="bar-chart-2"></span>
-                                Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span>
-                                Integrations
-                            </a>
-                        </li> -->
-                    </ul>
-    
-                    <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="plus-circle"></span>
-                        </a>
-                    </h6>
-                    <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                Current month
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                Last quarter
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                Social engagement
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                Year-end sale
-                            </a>
-                        </li>
-                    </ul> -->
-                </div>
-            </nav>
+            {% include "side-nav.html" %}
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div class="jumbotron h2">
@@ -125,7 +48,8 @@
                             <h5>Info about {{ customer.first_name }} {{ customer.last_name }}</h5>            
                             <h5>Email: {{ customer.email }}</h5>            
                             <h5>Phone Number: {{ customer.phone_number }}</h5>
-                            <h5 class="mt-4">Edit Customer Info <button>Edit</button></h5>            
+                            <!-- Button trigger modal -->
+                            <h5 class="mt-4">Edit Customer Info <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#editCustInfoModal">Edit</button></h5>            
                         </div>
                         <div class="col mt-5">
                             <h5># of orders: {{ orders|length }}</h5>
@@ -135,29 +59,94 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="editCustInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header modal-header-colored">
+                                <h3 class="modal-title">Edit Customer Information</h3>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-add-customer" id="cust_form" action='/customer/edit-info/{{ customer.id }}' method="POST" autocomplete="off">
+                                    {% csrf_token %}
+                                    <div class="form-group row">
+                                        <div class="input-group-prepend col-sm-4">
+                                            <span class="input-group-text">First Name: </span>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ customer.first_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="input-group-prepend col-sm-4">
+                                            <span class="input-group-text">Last Name: </span>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ customer.last_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="input-group-prepend col-sm-4">
+                                            <span class="input-group-text">Phone Number: </span>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ customer.phone_number }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="input-group-prepend col-sm-4">
+                                            <span class="input-group-text">Email: </span>
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="email" id="email" name="email" class="form-control" value="{{ customer.email }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="input-group-prepend col-sm-4">
+                                            <span class="input-group-text">Birthday: </span>
+                                        </div>
+                                        <div class="form-group col-8 date">
+                                            <input type="text" id="birthday" name="birthday" class="form-control" value="{{ customer.birthday }}">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary register" type="submit">Edit Customer</button>
+                                    <button class="btn btn-danger" type="submit"><a href="/customer" style="text-decoration: none; color: inherit;">Cancel</a></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 
-    <div class="navbar bg-dark d-flex flex-column footer">
-        <footer class="text-center">
-            <div class="container">
-                <span class="text-muted">&copy; Eaton Corp 2021</span>
-            </div>
-        </footer>
-    </div>
+    {% include "footer.html" %}
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
         feather.replace()
+
+        $(document).ready(function () {
+            $('#editCustInfoModal').on('show.bs.modal', function (e) {
+                var date_input=$('input[name="birthday"]');
+                var container=$('.date form').length>0 ? $('.date form').parent() : "body";
+                var options={
+                    format: 'mm/dd/yyyy',
+                    container: container,
+                    todayHighlight: true,
+                    autoclose: true,
+                };
+                date_input.datepicker(options);
+            })
+
+            $('#home_flush').click(function() {
+                // how to clear request.session['customer']?
+                // var customer_info = request.session['customer'];
+            })
+        })
     </script>
 
 </body>

@@ -15,6 +15,7 @@ def home(request):
 
 def search(request):
     request.session['customer'] = None
+    print(request.session['customer'])
     logged_user = User.objects.get(id=request.session["userid"])
 
     if request.method == "POST":
@@ -35,7 +36,7 @@ def register(request):
 
     return render(request, "add-customer.html", context)
 
-def add(request):
+def add_customer(request):
 
     if request.method == "POST":
     # errors = User.objects.reg_validator(request.POST)
@@ -63,6 +64,20 @@ def customer_info(request, customer_id):
         'orders': Order.objects.filter(customer = customer_id)
     }
     return render(request, 'cust-info.html', context)
+
+def edit_customer_info(request, customer_id):
+    logged_user = User.objects.get(id=request.session["userid"])
+    customer_id = customer_id
+    customer_to_edit = Customer.objects.get(id = customer_id)
+    
+    if request.method == "POST":
+        customer_to_edit.first_name = request.POST["first_name"]
+        customer_to_edit.last_name = request.POST["last_name"],
+        customer_to_edit.phone_number = request.POST["phone_number"],
+        customer_to_edit.email = request.POST["email"],
+        customer_to_edit.birthday = dt.datetime.strptime(request.POST["birthday"], "%m/%d/%Y")
+
+        return redirect(f'/customer/info/{customer_id}')
 
 def contact_history(request):
     logged_user = User.objects.get(id=request.session["userid"])

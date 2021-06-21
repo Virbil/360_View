@@ -15,66 +15,11 @@
     <title>360&deg; View</title>
 </head>
 <body class="text-center d-flex flex-column min-vh-100" style="padding-top: 3.5rem;">
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="/customer">360&deg; View</a>
-
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    {% include "top-nav.html" %}   
 
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar text-left">
-                <div class="sidebar-sticky">
-                    <ul class="nav flex-column mt-5">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/customer">
-                                <span data-feather="users"></span>
-                                Customer Search
-                            </a>
-                        </li>
-                        {% if searched_customers|length > 0 %}
-                            {% for customer in searched_customers %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/customer/info/{{customer.id}}">
-                                    <span data-feather="home"></span>
-                                    Customer Information <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                            {% endfor %}
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/contact-history">
-                                <span data-feather="file"></span>
-                                Contact History
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/order-history">
-                                <span data-feather="shopping-cart"></span>
-                                Orders
-                            </a>
-                        </li>
-                        {% if searched_customers|length > 0 %}
-                            {% for customer in searched_customers %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="/customer/order-history">
-                                    <span data-feather="tag"></span>
-                                    Place New Order
-                                </a>
-                            </li>
-                            {% endfor %}
-                        {% endif %}
-                </div>
-            </nav>
+            {% include "side-nav.html" %}
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
                 <div class="jumbotron h2">
@@ -170,13 +115,7 @@
         </div>
     </div>
 
-    <div class="navbar bg-dark d-flex flex-column footer">
-        <footer class="text-center">
-            <div class="container">
-                <span class="text-muted">&copy; Eaton Corp 2021</span>
-            </div>
-        </footer>
-    </div>
+    {% include "footer.html" %}   
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
