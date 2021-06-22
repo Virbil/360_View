@@ -1,6 +1,41 @@
 from django.db import models
 from django.db import models
 from login_reg_app.models import User
+import datetime as dt
+import re
+
+class Customer_Manager(models.Manager):
+    def age_of_user(self, birth_year):
+        date_today = dt.date.today().year
+        age = date_today - birth_year
+        
+        return int(age)
+
+    def new_cust_validator(self, post_data):
+        errors = {}
+
+        if len(post_data["first_name"]) < 2:
+            errors["first_name"] = "First name must be at least 2 characters"
+        
+        if len(post_data["last_name"]) < 2:
+            errors["last_name"] = "Last name must be at least 2 characters"
+        
+        if len(post_data["birthday"]) < 1:
+            errors["birthday"] = "Please select or enter a birthday"
+        if post_data["birthday"].isalpha() == True:
+            errors["birthday"] = "Birthday must be a valid date"
+        if len(post_data["birthday"]) > 0:
+            date_entered = dt.datetime.strptime(post_data["birthday"], "%m/%d/%Y")
+            if date_entered > dt.datetime.now():
+                errors["birthday"] = 'Birthday should be in the past'
+            if self.age_of_user(date_entered.year) < 13:
+                errors["birthday"] = "Must be 13 years or older to Register"
+
+        EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        if not EMAIL_REGEX.match(post_data['email']):           
+            errors['email'] = "Invalid email address!"
+
+        return errors
 
 class Customer(models.Model):
     first_name = models.CharField(max_length=255)
@@ -10,6 +45,8 @@ class Customer(models.Model):
     birthday = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = Customer_Manager()
 
 class Note(models.Model):
     note = models.TextField()

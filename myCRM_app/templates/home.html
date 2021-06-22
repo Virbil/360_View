@@ -40,7 +40,7 @@
                                     <input class="form-control" type="email" name="email" id="email_search" placeholder="email@example.com"></input>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right">Search</button>
+                            <button type="submit" class="btn btn-primary float-right" id="btnEmailSearch">Search</button>
                         </div>
 
                         <div class="container">
@@ -53,7 +53,7 @@
                                     <input class="form-control" name="phone_number" placeholder="1-234-567-8901"></input>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right">Search</button>
+                            <button type="submit" class="btn btn-primary float-right" id="btnPhoneSearch">Search</button>
                         </div>
 
                         <div class="container">
@@ -82,7 +82,7 @@
                                     <input class="form-control" type="date" name="birthday"></input>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right mb-5">Search</button>
+                            <button type="submit" class="btn btn-primary float-right mb-5" id="btnNameBirthSearch">Search</button>
                         </div>
                     </form>
                 </div>
@@ -130,14 +130,23 @@
 
     <script>
         feather.replace()
+        
+        $(document).ready(function() {
+            $('#btnEmailSearch').click(function() {
+                // pass the email to views
+            })
+            
+            $('#btnPhoneSearch').click(function() {
+                // pass the phone number to views
+                
+            })
+            
+            $('#btnNameBirthSearch').click(function() {
+                // pass the first/last name and birthday to views
 
-        $(document).ready(function () {
-            $('#email_search').autocomplete({
-                source: "{% url 'autocomplete_model' %}"
             })
         })
 
-        
         $('#home_flush').click(function() {
             // how to clear request.session['customer']?
             // var customer_info = request.session['customer'];

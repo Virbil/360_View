@@ -1,10 +1,12 @@
+from myCRM_app.decorators import validate_request
+from django.contrib import messages
 from myCRM_app.models import *
 from django.shortcuts import render, redirect, HttpResponse
 import datetime as dt
 import json
 
-def home(request):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def home(request, logged_user):
     if 'customer' not in request.session:
         request.session['customer'] = 0
 
@@ -14,9 +16,9 @@ def home(request):
     }
     return render(request, "home.html", context)
 
-def search(request):
+@validate_request
+def search(request, logged_user):
     request.session['customer'] = None
-    logged_user = User.objects.get(id=request.session["userid"])
 
     if request.method == "POST":
         searched_customer = Customer.objects.filter(email=request.POST["email"])
@@ -41,8 +43,8 @@ def autocomplete_model(request):
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
 
-def register(request):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def register(request, logged_user):
 
     context = {
         "user_info": logged_user
@@ -53,12 +55,12 @@ def register(request):
 def add_customer(request):
 
     if request.method == "POST":
-    # errors = User.objects.reg_validator(request.POST)
+        errors = Customer.objects.new_cust_validator(request.POST)
 
-    # if len(errors) > 0:
-    #     for key, value in errors.items():
-    #         messages.error(request, value)
-    #     return redirect('/register')
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect('/customer/register')
 
         new_customer = Customer.objects.create(
             first_name = request.POST["first_name"],
@@ -69,8 +71,9 @@ def add_customer(request):
         )
     return redirect('/customer')
 
-def customer_info(request, customer_id):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def customer_info(request, logged_user, customer_id):
+
     customer_id = customer_id
     context = {
         'user_info': logged_user,
@@ -79,11 +82,11 @@ def customer_info(request, customer_id):
     }
     return render(request, 'cust-info.html', context)
 
-def edit_customer_info(request, customer_id):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def edit_customer_info(request, logged_user, customer_id):
+
     customer_id = customer_id
     customer_to_edit = Customer.objects.get(id = customer_id)
-    print(request.POST['birthday'])
     
     if request.method == "POST":
         customer_to_edit.first_name = request.POST["first_name"]
@@ -95,10 +98,10 @@ def edit_customer_info(request, customer_id):
 
         return redirect(f'/customer/info/{customer_id}')
 
-def contact_history(request):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def contact_history(request, logged_user):
     customer = Customer.objects.get(id=request.session["customer"])
-    print(customer)
+
     context = {
         'user_info': logged_user,
         'customer': Customer.objects.get(id=request.session["customer"]),
@@ -106,8 +109,8 @@ def contact_history(request):
     }
     return render(request, 'contact-history.html', context)
 
-def post_note(request):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def post_note(request, logged_user):
     customer = request.session["customer"]
     if request.method == "POST":
         note = Note.objects.create(
@@ -117,8 +120,8 @@ def post_note(request):
         )
     return redirect('/customer/contact-history')
 
-def order_history(request):
-    logged_user = User.objects.get(id=request.session["userid"])
+@validate_request
+def order_history(request, logged_user):
     customer = request.session["customer"]
     all_products = Product.objects.all()
     context = {
@@ -129,12 +132,12 @@ def order_history(request):
     }
     return render(request, 'order-history.html', context)
 
-def place_order(request):
+@validate_request
+def place_order(request, logged_user):
     customer = Customer.objects.get(id=request.session["customer"])
     products = request.POST.getlist('products')
 
     if request.method == "GET":
-        logged_user = User.objects.get(id=request.session["userid"])
         customer = request.session["customer"]
         all_products = Product.objects.all()
         context = {
