@@ -27,7 +27,7 @@
                 
                 <div class="container">
                     <h1 class="lead">Place a new order: </h1>
-                    <form action="/customer/place-order" method="POST">
+                    <form action="/customer/place-order" id="order" method="POST">
                         {% csrf_token %}
                         <div class="form-group row">
                             <div class="input-group-prepend col-sm-2">
@@ -48,11 +48,11 @@
                         </div>
                     </form>
                     <!-- Button trigger modal -->
-                    <button class="btn btn-primary mb-5" type="submit" data-toggle="modal" data-target="#exampleModal">Place Order</button>
+                    <button class="btn btn-primary mb-5" type="submit" data-toggle="modal" data-target="#placeOrderModal">Place Order</button>
                 </div>
                 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="placeOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -91,6 +91,10 @@
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
         feather.replace()
+
+        $('.place_order').click(function() {
+            $('#order').submit()
+        })
     </script>
 
 </body>

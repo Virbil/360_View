@@ -4,13 +4,10 @@ from django.contrib import messages
 from myCRM_app.models import *
 from django.shortcuts import render, redirect, HttpResponse
 import datetime as dt
-import json
-from django.db.models import Q
 
 @validate_request
 def home(request, logged_user):
-    if 'customer' not in request.session:
-        request.session['customer'] = 0
+    request.session['customer'] = 0
 
     context = {
         "user_info": logged_user,
@@ -51,16 +48,6 @@ def search(request, info_provided):
 
         return render(request, 'customer-list.html', context)
 
-
-
-@validate_request
-def register(request, logged_user):
-
-    context = {
-        "user_info": logged_user
-    }
-
-    return render(request, "add-customer.html", context)
 
 def add_customer(request):
 

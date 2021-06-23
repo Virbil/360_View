@@ -27,69 +27,12 @@
                 </div>
                 
                 <div class="container" id="add-customer-results"></div>
-                
-                <!-- Modal -->
-                <div class="modal fade" id="addCustModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header modal-header-colored">
-                                <h3 class="modal-title">Add a Customer</h3>
-                            </div>
-                            <div class="modal-body">
-                                <form class="form-add-customer" id="cust_form" action='/customer/add' method="POST" autocomplete="off">
-                                    {% csrf_token %}
-                                    <div class="form-group row">
-                                        <div class="input-group-prepend col-sm-4">
-                                            <span class="input-group-text">First Name: </span>
-                                        </div>
-                                        <div class="col-8">
-                                            <input type="text" id="first_name" name="first_name" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="input-group-prepend col-sm-4">
-                                            <span class="input-group-text">Last Name: </span>
-                                        </div>
-                                        <div class="col-8">
-                                            <input type="text" id="last_name" name="last_name" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="input-group-prepend col-sm-4">
-                                            <span class="input-group-text">Phone Number: </span>
-                                        </div>
-                                        <div class="col-8">
-                                            <input type="text" id="phone_number" name="phone_number" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="input-group-prepend col-sm-4">
-                                            <span class="input-group-text">Email: </span>
-                                        </div>
-                                        <div class="col-8">
-                                            <input type="email" id="email" name="email" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="input-group-prepend col-sm-4">
-                                            <span class="input-group-text">Birthday: </span>
-                                        </div>
-                                        <div class="form-group col-8 date">
-                                            <input type="text" id="birthday" name="birthday" class="form-control">
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-primary register" type="submit">Add Customer</button>
-                                    <button class="btn btn-danger" type="submit"><a href="/customer" style="text-decoration: none; color: inherit;">Cancel</a></button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
+                {% include "add-cust-modal.html" %}
 
                 <div class="container">
                     <h1 class="lead">Customer Search</h1>
-                    <form class="formSearch" action="/customer/search" method="POST" autocomplete="off">
+                    <form class="formEmailSearch" action="/customer/search" method="POST" autocomplete="off">
                         {% csrf_token %}
                         <div class="row">
                             <div class="container">
@@ -99,18 +42,18 @@
                                         <label class="lead" for="email">Email Address: </label>
                                     </div>
                                     <div class="col-sm-8">
-
-                                        <!-- empty div for returning if user left email input blank -->
-                                        <div id="email_result" style="color: red;">
-                                        </div>
-
                                         <input class="form-control" type="email" name="email" id="email_search" placeholder="email@example.com"></input>
                                     </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-primary float-right" id="btnEmailSearch">Search</button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary float-right" id="btnEmailSearch">Search</button>
                             </div>
                         </div>
-                        
+                    </form>
+
+                    <form class="formPhoneSearch" action="/customer/search" method="POST" autocomplete="off">
+                        {% csrf_token %}
                         <div class="row">
                             <div class="container">
                                 <h3 class="lead text-left mt-5">Phone Number Search</h3>
@@ -119,18 +62,18 @@
                                         <label class="lead" for="phone_number">Phone Number: </label>
                                     </div>
                                     <div class="col-sm-8">
-
-                                        <!-- empty div for returning if user left phone number input blank -->
-                                        <div id="phone_result" style="color: red;">
-                                        </div>
-
                                         <input class="form-control" name="phone_number" placeholder="1-234-567-8901" id="phone_search"></input>
                                     </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-primary float-right" id="btnPhoneSearch">Search</button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary float-right" id="btnPhoneSearch">Search</button>
                             </div>
                         </div>
+                    </form>
                 
+                    <form class="formNameBirthSearch" action="/customer/search" method="POST" autocomplete="off">
+                        {% csrf_token %}
                         <div class="row">
                             <div class="container">
                                 <h3 class="lead text-left mt-5">Name & Birthday Search</h3>
@@ -139,11 +82,6 @@
                                         <label class="lead" for="first_name">First Name: </label>
                                     </div>
                                     <div class="col-sm-8">
-
-                                        <!-- empty div for returning if user left name and birthday input blank -->
-                                        <div id="name_birth_result" style="color: red;">
-                                        </div>
-
                                         <input class="form-control" name="first_name" placeholder="First Name" id="fname_search"></input>
                                     </div>
                                 </div>
@@ -162,8 +100,10 @@
                                     <div class="col-sm-8">
                                         <input class="form-control" type="date" name="birthday" id="birthday_search"></input>
                                     </div>
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-primary float-right mb-5" id="btnNameBirthSearch">Search</button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary float-right mb-5" id="btnNameBirthSearch">Search</button>
                             </div>
                         </div>
                     </form>
@@ -178,11 +118,10 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
@@ -195,19 +134,16 @@
                 var email_search = document.getElementById('email_search').value;
 
                 if (email_search == '') {
-                    $('#email_result').html("Email was left blank.")
-                    // Button trigger modal
-                    $('#email_result').append("<h4 class='lead'>Add a new customer? <button class='btn btn-primary' type='submit' data-toggle='modal' data-target='#addCustModal'>Yes</button></h4>")
+                    $('#emptySearchModal').modal('toggle');
                 }
             })
+
 
             $('#btnPhoneSearch').click(function() {
                 var phone_search = document.getElementById('phone_search').value;
 
                 if (phone_search == '') {
-                    $('#phone_result').html("Phone number was left blank.")
-                    // Button trigger modal
-                    $('#phone_result').append("<h4 class='lead'>Add a new customer? <button class='btn btn-primary' type='submit' data-toggle='modal' data-target='#addCustModal'>Yes</button></h4>")
+                    $('#emptySearchModal').modal('toggle');
                 }
             })
             
@@ -217,16 +153,17 @@
                 var birthday_search = document.getElementById('birthday_search').value;
 
                 if (fname_search == '' || lname_search == '' || birthday_search == '') {
-                    $('#name_birth_result').html("Name and/or birthday was left blank.")
-                    // Button trigger modal
-                    $('#name_birth_result').append("<h4 class='lead'>Add a new customer? <button class='btn btn-primary' type='submit' data-toggle='modal' data-target='#addCustModal'>Yes</button></h4>")
+                    $('#emptySearchModal').modal('toggle');
                 }
             })
 
-            
+            $('#openAddCustModal').click(function() {
+                $('#emptySearchModal').modal('hide');
+                $('#addCustModal').modal('show');
+            })
             
 
-            $('.formSearch').submit(function(e) {
+            $('.formEmailSearch').submit(function(e) {
                 e.preventDefault();
 
                 $.ajax({
@@ -239,7 +176,7 @@
                 })
             })
 
-            $('.formSearch').submit(function(e) {
+            $('.formPhoneSearch').submit(function(e) {
                 e.preventDefault();
 
                 $.ajax({
@@ -252,7 +189,7 @@
                 })
             })
 
-            $('.formSearch').submit(function(e) {
+            $('.formNameBirthSearch').submit(function(e) {
                 e.preventDefault();
 
                 $.ajax({
