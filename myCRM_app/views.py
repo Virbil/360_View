@@ -5,6 +5,7 @@ from myCRM_app.models import *
 from django.shortcuts import render, redirect, HttpResponse
 import datetime as dt
 import json
+from django.db.models import Q
 
 @validate_request
 def home(request, logged_user):
@@ -20,25 +21,29 @@ def home(request, logged_user):
 
 def search(request, info_provided):
     request.session['customer'] = None
+    searched_customers = []
 
     if request.method == "POST":
         if info_provided == 'email':
-            searched_customer = Customer.objects.filter(email=request.POST['email'])
+            searched_customers = Customer.objects.filter(email=request.POST['email'])
+
         elif info_provided == 'phone':
-            searched_customer = Customer.objects.filter(phone_number=request.POST['phone_number'])
+            searched_customers = Customer.objects.filter(phone_number=request.POST['phone_number'])
         
-            # customer_fname = Customer.objects.get(first_name=request.POST["first_name"])
-            # customer_lname = Customer.objects.get(last_name=request.POST["last_name"])
-            # customer_birth = Customer.objects.get(birthday=request.POST["birthday"])
-            # searched_customer = Customer.objects.filter(customer=customer_fname).filter(customer=customer_lname).filter(customer=customer_birth)
+        else:
+            customer = Customer.objects.filter(
+                first_name__contains=request.POST['first_name'].title(),
+                last_name__contains=request.POST['last_name'].title(),
+                birthday__contains=request.POST['birthday']
+            )
+            searched_customers = customer
 
-
-        if searched_customer:
-            customer_id = searched_customer[0].id
+        if searched_customers:
+            customer_id = searched_customers[0].id
             request.session["customer"] = customer_id
         
         context = {
-            'searched_customers': searched_customer
+            'searched_customers': searched_customers
         }
 
         return render(request, 'customer-list.html', context)
