@@ -38,9 +38,6 @@ def search(request, info_provided):
         if searched_customers:
             customer_id = searched_customers[0].id
             request.session["customer"] = customer_id
-
-        else:
-            return redirect('/customer/register')
         
         context = {
             'searched_customers': searched_customers
@@ -57,21 +54,22 @@ def add_customer(request):
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect('/customer/register')
 
         new_customer = Customer.objects.create(
             first_name = request.POST["first_name"],
             last_name = request.POST["last_name"],
             phone_number = request.POST["phone_number"],
             email = request.POST["email"],
-            birthday = dt.datetime.strptime(request.POST["birthday"], "%m/%d/%Y")
+            birthday = request.POST["birthday"]
         )
-    return redirect('/customer')
+    return redirect(f'/customer/info/{new_customer.id}')
+
 
 @validate_request
 def customer_info(request, logged_user, customer_id):
 
     customer_id = customer_id
+
     context = {
         'user_info': logged_user,
         'customer': Customer.objects.get(id=customer_id),

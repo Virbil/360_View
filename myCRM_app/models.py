@@ -25,10 +25,12 @@ class Customer_Manager(models.Manager):
         if post_data["birthday"].isalpha() == True:
             errors["birthday"] = "Birthday must be a valid date"
         if len(post_data["birthday"]) > 0:
-            date_entered = dt.datetime.strptime(post_data["birthday"], "%m/%d/%Y")
-            if date_entered > dt.datetime.now():
+            date_entered = post_data["birthday"]
+            birthday = dt.datetime.strptime(date_entered, '%Y-%m-%d')
+
+            if birthday > dt.datetime.now():
                 errors["birthday"] = 'Birthday should be in the past'
-            if self.age_of_user(date_entered.year) < 13:
+            if self.age_of_user(birthday.year) < 13:
                 errors["birthday"] = "Must be 13 years or older to Register"
 
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')

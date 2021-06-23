@@ -110,14 +110,13 @@
                                             <input type="date" id="birthday" name="birthday" class="form-control" value="{{ customer.birthday| date:'Y-m-d' }}">
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary register" type="submit">Edit Customer</button>
+                                    <button class="btn btn-primary" type="submit">Edit Customer</button>
                                     <button class="btn btn-danger" type="submit"><a href="/customer/info/{{ customer.id }}" style="text-decoration: none; color: inherit;">Cancel</a></button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
         </div>
     </div>
 
@@ -128,14 +127,6 @@
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
         feather.replace()
-
-        $(document).ready(function () {
-
-            $('#home_flush').click(function() {
-                // how to clear request.session['customer']?
-                // var customer_info = request.session['customer'];
-            })
-        })
     </script>
 
 </body>
