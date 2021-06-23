@@ -35,6 +35,14 @@ class Customer_Manager(models.Manager):
         if not EMAIL_REGEX.match(post_data['email']):           
             errors['email'] = "Invalid email address!"
 
+        email_match = Customer.objects.filter(email=post_data['email'])
+        if len(email_match) > 0:
+            errors['email'] = "This email has already been taken!"
+
+        phone_match = Customer.objects.filter(phone_number=post_data['phone_number'])
+        if len(phone_match) > 0:
+            errors['phone_number'] = "This phone number has already been taken!"
+
         return errors
 
 class Customer(models.Model):

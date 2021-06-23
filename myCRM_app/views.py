@@ -41,6 +41,9 @@ def search(request, info_provided):
         if searched_customers:
             customer_id = searched_customers[0].id
             request.session["customer"] = customer_id
+
+        else:
+            return redirect('/customer/register')
         
         context = {
             'searched_customers': searched_customers
@@ -48,23 +51,7 @@ def search(request, info_provided):
 
         return render(request, 'customer-list.html', context)
 
-    else:
-        return redirect('/customer/register')
 
-
-def autocomplete_model(request):
-    if request.method == "GET":
-        q = request.GET.get('term', '').capitalize()
-        search_qs = Customer.objects.filter(email__startswith=q)
-        results = []
-        for r in search_qs[0:10]:
-            results.append(r.email)
-
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
 
 @validate_request
 def register(request, logged_user):
