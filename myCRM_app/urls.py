@@ -5,7 +5,7 @@ urlpatterns = [
     path('', views.home),
     path('register', views.register),
     path('add', views.add_customer),
-    path('search', views.search),
+    path('search/<str:info_provided>', views.search),
     # path("ajax_search", views.autocomplete_model, name='autocomplete_model'),
     path('info/<int:customer_id>', views.customer_info),
     path('edit-info/<int:customer_id>', views.edit_customer_info),

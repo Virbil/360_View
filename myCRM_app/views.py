@@ -1,3 +1,4 @@
+from django.contrib.messages.api import info
 from myCRM_app.decorators import validate_request
 from django.contrib import messages
 from myCRM_app.models import *
@@ -16,18 +17,35 @@ def home(request, logged_user):
     }
     return render(request, "home.html", context)
 
-@validate_request
-def search(request, logged_user):
+
+def search(request, info_provided):
     request.session['customer'] = None
 
     if request.method == "POST":
-        searched_customer = Customer.objects.filter(email=request.POST["email"])
+        if info_provided == 'email':
+            searched_customer = Customer.objects.filter(email=request.POST['email'])
+        elif info_provided == 'phone':
+            searched_customer = Customer.objects.filter(phone_number=request.POST['phone_number'])
+        
+            # customer_fname = Customer.objects.get(first_name=request.POST["first_name"])
+            # customer_lname = Customer.objects.get(last_name=request.POST["last_name"])
+            # customer_birth = Customer.objects.get(birthday=request.POST["birthday"])
+            # searched_customer = Customer.objects.filter(customer=customer_fname).filter(customer=customer_lname).filter(customer=customer_birth)
+
+
         if searched_customer:
             customer_id = searched_customer[0].id
             request.session["customer"] = customer_id
-        else:
-            return redirect('/customer/register')
-    return redirect('/customer')
+        
+        context = {
+            'searched_customers': searched_customer
+        }
+
+        return render(request, 'customer-list.html', context)
+
+    else:
+        return redirect('/customer/register')
+
 
 def autocomplete_model(request):
     if request.method == "GET":

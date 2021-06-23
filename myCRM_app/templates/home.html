@@ -28,89 +28,72 @@
                 
                 <div class="container">
                     <h1 class="lead">Customer Search</h1>
-                    <form action="/customer/search" method="POST" autocomplete="off">
+                    <form class="formSearch" action="/customer/search" method="POST" autocomplete="off">
                         {% csrf_token %}
-                        <div class="container">
-                            <h3 class="lead text-left">Email Search</h3>
-                            <div class="form-group row mt-3">
-                                <div class="col-sm-2">
-                                    <label class="lead" for="email">Email Address: </label>
+                        <div class="row">
+                            <div class="container">
+                                <h3 class="lead text-left">Email Search</h3>
+                                <div class="form-group row mt-3">
+                                    <div class="col-sm-2">
+                                        <label class="lead" for="email">Email Address: </label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="email" name="email" id="email_search" placeholder="email@example.com"></input>
+                                    </div>
                                 </div>
-                                <div class="col-sm-8">
-                                    <input class="form-control" type="email" name="email" id="email_search" placeholder="email@example.com"></input>
-                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Search</button>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right" id="btnEmailSearch">Search</button>
                         </div>
-
-                        <div class="container">
-                            <h3 class="lead text-left mt-5">Phone Number Search</h3>
-                            <div class="form-group row mt-3">
-                                <div class="col-sm-2">
-                                    <label class="lead" for="phone_number">Phone Number: </label>
+                        
+                        <div class="row">
+                            <div class="container">
+                                <h3 class="lead text-left mt-5">Phone Number Search</h3>
+                                <div class="form-group row mt-3">
+                                    <div class="col-sm-2">
+                                        <label class="lead" for="phone_number">Phone Number: </label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" name="phone_number" placeholder="1-234-567-8901"></input>
+                                    </div>
                                 </div>
-                                <div class="col-sm-8">
-                                    <input class="form-control" name="phone_number" placeholder="1-234-567-8901"></input>
-                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Search</button>
                             </div>
-                            <button type="submit" class="btn btn-primary float-right" id="btnPhoneSearch">Search</button>
                         </div>
-
-                        <div class="container">
-                            <h3 class="lead text-left mt-5">Name & Birthday Search</h3>
-                            <div class="form-group row mt-3">
-                                <div class="col-sm-2">
-                                    <label class="lead" for="first_name">First Name: </label>
+                
+                        <div class="row">
+                            <div class="container">
+                                <h3 class="lead text-left mt-5">Name & Birthday Search</h3>
+                                <div class="form-group row mt-3">
+                                    <div class="col-sm-2">
+                                        <label class="lead" for="first_name">First Name: </label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" name="first_name" placeholder="First Name"></input>
+                                    </div>
                                 </div>
-                                <div class="col-sm-8">
-                                    <input class="form-control" name="first_name" placeholder="First Name"></input>
+                                <div class="form-group row mt-3">
+                                    <div class="col-sm-2">
+                                        <label class="lead" for="last_name">Last Name: </label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" name="last_name" placeholder="Last Name"></input>
+                                    </div>
                                 </div>
+                                <div class="form-group row mt-3">
+                                    <div class="col-sm-2">
+                                        <label class="lead" for="birthday">Birthday: </label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="date" name="birthday"></input>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right mb-5">Search</button>
                             </div>
-                            <div class="form-group row mt-3">
-                                <div class="col-sm-2">
-                                    <label class="lead" for="last_name">Last Name: </label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input class="form-control" name="last_name" placeholder="Last Name"></input>
-                                </div>
-                            </div>
-                            <div class="form-group row mt-3">
-                                <div class="col-sm-2">
-                                    <label class="lead" for="birthday">Birthday: </label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input class="form-control" type="date" name="birthday"></input>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary float-right mb-5" id="btnNameBirthSearch">Search</button>
                         </div>
                     </form>
                 </div>
 
-                {% if searched_customers|length > 0 %}
-                <div class="container">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col" hidden>ID</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Phone Number</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Birthday</th>
-                            </tr>
-                        </thead>
-                        {% for customer in searched_customers %}
-                            <tr class="table-primary">
-                                <td hidden>{{ customer.id }}</td>
-                                <td><a href="/customer/info/{{customer.id}}">{{ customer.first_name }} {{ customer.last_name }}</a></td>
-                                <td>{{ customer.phone_number }}</td>
-                                <td>{{ customer.email }}</td>
-                                <td>{{ customer.birthday | date:'F d, Y' }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-                {% endif %}
+                <div id="results"></div>
             </main>
         </div>
     </div>
@@ -132,18 +115,43 @@
         feather.replace()
         
         $(document).ready(function() {
-            $('#btnEmailSearch').click(function() {
-                // pass the email to views
-            })
-            
-            $('#btnPhoneSearch').click(function() {
-                // pass the phone number to views
-                
-            })
-            
-            $('#btnNameBirthSearch').click(function() {
-                // pass the first/last name and birthday to views
+            $('.formSearch').submit(function(e) {
+                e.preventDefault();
 
+                $.ajax({
+                    url: '/customer/search/email',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $("#results").html(response)
+                    }
+                })
+            })
+
+            $('.formSearch').submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '/customer/search/phone',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $("#results").html(response)
+                    }
+                })
+            })
+
+            $('.formSearch').submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '/customer/search/name-birth',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $("#results").html(response)
+                    }
+                })
             })
         })
 
