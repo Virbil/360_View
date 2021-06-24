@@ -4,6 +4,7 @@ from django.contrib import messages
 from myCRM_app.models import *
 from django.shortcuts import render, redirect, HttpResponse
 import datetime as dt
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @validate_request
 def home(request, logged_user):
@@ -96,11 +97,22 @@ def edit_customer_info(request, logged_user, customer_id):
 @validate_request
 def contact_history(request, logged_user):
     customer = Customer.objects.get(id=request.session["customer"])
+    notes_list = Note.objects.filter(customer=customer)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(notes_list, 6)
+
+    try:
+        notes = paginator.page(page)
+    except PageNotAnInteger:
+        notes = paginator.page(1)
+    except EmptyPage:
+        notes = paginator.page(paginator.num_pages)
 
     context = {
         'user_info': logged_user,
         'customer': Customer.objects.get(id=request.session["customer"]),
-        'notes': Note.objects.filter(customer=customer)
+        'notes': notes
     }
     return render(request, 'contact-history.html', context)
 
@@ -118,12 +130,24 @@ def post_note(request, logged_user):
 @validate_request
 def order_history(request, logged_user):
     customer = request.session["customer"]
+    orders_list = Order.objects.filter(customer=customer)
     all_products = Product.objects.all()
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(orders_list, 6)
+
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
+
     context = {
         'user_info': logged_user,
         'customer': Customer.objects.get(id=customer),
         'products': all_products,
-        'orders': Order.objects.filter(customer=customer)
+        'orders': orders
     }
     return render(request, 'order-history.html', context)
 

@@ -25,40 +25,75 @@
                         <h1 class="cover-heading">Welcome, Agent {{ user_info.last_name }}</h1>
                 </div>
                 
-                <div class="container">
-                    <form action="/customer/post-note" method="POST" autocomplete="off">
-                        {% csrf_token %}
-                        <div class="form-group row mt-3">
-                            <div class="col-sm-4">
-                                <label for="note">Post Contact Notes for {{ customer.first_name }}: </label>
+                <div class="row">
+                    <div class="container">
+                        <form action="/customer/post-note" method="POST" autocomplete="off">
+                            {% csrf_token %}
+                            <div class="form-group row mt-3">
+                                <div class="col-sm-4">
+                                    <label for="note">Post Contact Notes for {{ customer.first_name }}: </label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" name="note" rows="3"></textarea>
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <textarea class="form-control" name="note" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary float-right mb-5">Post Note</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary float-right mb-5">Post Note</button>
+                        </form>
+                    </div>
                 </div>
 
-                <div class="container mt-5">
-                    {% for note in notes reversed %}
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3 class="float-left">Agent {{ note.user.last_name }} - Notes from {{ note.updated_at| date:'F d, Y' }}</h3>
+                <div class="container">
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto mt-3">
+                            {% for note in notes reversed %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3 class="lead float-left mt-3">Agent {{ note.user.last_name }} - Notes from {{ note.updated_at| date:'F d, Y' }}</h3>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <p class="lead float-left ml-5">{{ note.note }}</p>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p class="lead float-left ml-5">{{ note.note }}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="container">
+                        <nav aria-label="Page navigation">
+                            {% if notes.has_other_pages %}
+                                <ul class="pagination justify-content-center">
+                                    {% if notes.has_previous %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ notes.previous_page_number }}">&laquo;</a></li>
+                                    {% else %}
+                                        <li class="page-item disabled" tabindex="-1"><span class="page-link">&laquo;</span></li>
+                                    {% endif %}
+
+                                    {% for i in notes.paginator.page_range %}
+                                    {% if notes.number == i %}
+                                        <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if notes.has_next %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ notes.next_page_number }}">&raquo;</a></li>
+                                    {% else %}
+                                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </nav>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
+
 
     {% include "footer.html" %}
 
