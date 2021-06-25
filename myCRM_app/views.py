@@ -46,6 +46,32 @@ def search(request, info_provided):
 
         return render(request, 'customer-list.html', context)
 
+@validate_request
+def maintain_users(request, logged_user):
+    all_users = User.objects.all()
+
+    context = {
+        "user_info": logged_user,
+        "all_users": all_users
+    }
+    return render(request, "maintenance.html", context)
+
+def edit_user(request, user_id):
+    user_to_edit = User.objects.get(id = user_id)
+    user_to_edit.email = request.POST['email']
+    user_to_edit.user_type = request.POST['user_type']
+    user_to_edit.save()
+    return redirect('/customer/maintenance')
+
+def delete_user(request, user_id):
+    user_to_delete = User.objects.get(id = user_id)
+    all_users = User.objects.all()
+    if len(all_users) > 1:
+        print(user_to_delete)
+    else:
+        print("There is only 1 user. Can't delete.")
+    return redirect('/customer/maintenance')
+
 
 def add_customer(request):
 
@@ -56,10 +82,16 @@ def add_customer(request):
             for key, value in errors.items():
                 messages.error(request, value)
 
+        phone_number = request.POST['phone_number']
+        if phone_number[:2] == "1-":
+            phone_number = phone_number
+        else:
+            phone_number = f"1-{phone_number}"
+
         new_customer = Customer.objects.create(
-            first_name = request.POST["first_name"],
-            last_name = request.POST["last_name"],
-            phone_number = request.POST["phone_number"],
+            first_name = request.POST["first_name"].title(),
+            last_name = request.POST["last_name"].title(),
+            phone_number = phone_number,
             email = request.POST["email"],
             birthday = request.POST["birthday"]
         )
@@ -83,11 +115,17 @@ def edit_customer_info(request, logged_user, customer_id):
 
     customer_id = customer_id
     customer_to_edit = Customer.objects.get(id = customer_id)
+
+    phone_number = request.POST['phone_number']
+    if phone_number[:2] == "1-":
+        phone_number = phone_number
+    else:
+        phone_number = f"1-{phone_number}"
     
     if request.method == "POST":
-        customer_to_edit.first_name = request.POST["first_name"]
-        customer_to_edit.last_name = request.POST["last_name"]
-        customer_to_edit.phone_number = request.POST["phone_number"]
+        customer_to_edit.first_name = request.POST["first_name"].title()
+        customer_to_edit.last_name = request.POST["last_name"].title()
+        customer_to_edit.phone_number = phone_number
         customer_to_edit.email = request.POST["email"]
         customer_to_edit.birthday = request.POST["birthday"]
         customer_to_edit.save()
