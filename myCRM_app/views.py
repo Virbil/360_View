@@ -5,6 +5,8 @@ from myCRM_app.models import *
 from django.shortcuts import render, redirect, HttpResponse
 import datetime as dt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import requests
+import json
 
 @validate_request
 def home(request, logged_user):
@@ -67,7 +69,7 @@ def delete_user(request, user_id):
     user_to_delete = User.objects.get(id = user_id)
     all_users = User.objects.all()
     if len(all_users) > 1:
-        print(user_to_delete)
+        user_to_delete.delete()
     else:
         print("There is only 1 user. Can't delete.")
     return redirect('/customer/maintenance')
@@ -169,6 +171,7 @@ def post_note(request, logged_user):
 def order_history(request, logged_user):
     customer = request.session["customer"]
     orders_list = Order.objects.filter(customer=customer)
+
     all_products = Product.objects.all()
 
     page = request.GET.get('page', 1)
@@ -192,11 +195,35 @@ def order_history(request, logged_user):
 @validate_request
 def place_order(request, logged_user):
     customer = Customer.objects.get(id=request.session["customer"])
-    products = request.POST.getlist('products')
+
+    # api call
+    response = requests.get('https://fakestoreapi.com/products')
+
+    all_products = json.loads(response.text)
+    # json_formatted_str = json.dumps(all_products, indent=2)
+    # for product in all_products:
+    #     print(f"Title: {product['title']}")
+    #     print(f"Description: {product['description']}")
+    #     print(f"Price: {product['price']}")
+    #     print(f"Image: {product['image']}")
+
+    # If product doesn't exist, add to DB
+    for product in all_products:
+        try:
+            new_product = Product.objects.get(id=product['id'])
+        except:
+            new_product = Product.objects.create(
+                product_name = product['title'],
+                description = product['description'],
+                price = product['price'],
+                product_image = product['image']
+            )
+            print(new_product.product_name)
+
 
     if request.method == "GET":
         customer = request.session["customer"]
-        all_products = Product.objects.all()
+        # all_products = Product.objects.all()
         context = {
             'user_info': logged_user,
             'customer': Customer.objects.get(id=customer),
@@ -205,9 +232,13 @@ def place_order(request, logged_user):
         return render(request, 'place-order.html', context)
 
     if request.method == "POST":
+        products = request.POST.getlist('products')
+
         new_order = Order.objects.create(
             customer = customer
         )
+
         for product in products:
             new_order.products.add(Product.objects.get(id=product))
+
         return redirect('/customer/order-history')

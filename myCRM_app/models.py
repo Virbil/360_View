@@ -3,6 +3,7 @@ from django.db import models
 from login_reg_app.models import User
 import datetime as dt
 import re
+from PIL import Image
 
 class Customer_Manager(models.Manager):
     def age_of_user(self, birth_year):
@@ -69,6 +70,7 @@ class Product(models.Model):
     product_name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    product_image = models.ImageField(upload_to="images")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

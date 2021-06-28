@@ -30,9 +30,11 @@
                     {% for order in orders reversed %}
                     <div class="card mb-4 rounded-3 ">
                         <div class="card m-2">
-                            <!-- https://loremflickr.com/320/240/clothes -->
-                            <img src="{% static 'img/crew_t.webp' %}" class="card-img-top" alt="crew neck t-shirt">
                             <h5 class="card-title mt-2">Order Number: {{order.id}}</h5>
+                            {% with order.products.all|first as first_order %}
+                                <img src="{{ first_order.product_image }}" class="card-img-top" alt="{{ product.description }}">
+                            {% endwith %}
+                            
                             {% for product in order.products.all %}
                             <div class="card-body">
                                 <p class="card-text">{{ product.product_name }} for ${{ product.price }}</p>
