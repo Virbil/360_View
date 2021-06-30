@@ -2,7 +2,7 @@ from django.contrib.messages.api import info
 from myCRM_app.decorators import validate_request
 from django.contrib import messages
 from myCRM_app.models import *
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 import datetime as dt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import requests
@@ -25,16 +25,16 @@ def search(request, info_provided):
 
     if request.method == "POST":
         if info_provided == 'email':
-            searched_customers = Customer.objects.filter(email=request.POST['email'])
+            searched_customers = Customer.objects.filter(email = request.POST['email'])
 
         elif info_provided == 'phone':
-            searched_customers = Customer.objects.filter(phone_number=request.POST['phone_number'])
+            searched_customers = Customer.objects.filter(phone_number = request.POST['phone_number'])
         
         else:
             customer = Customer.objects.filter(
-                first_name__contains=request.POST['first_name'].title(),
-                last_name__contains=request.POST['last_name'].title(),
-                birthday__contains=request.POST['birthday']
+                first_name = request.POST['first_name'].title(),
+                last_name = request.POST['last_name'].title(),
+                birthday = request.POST['birthday']
             )
             searched_customers = customer
 
@@ -42,11 +42,15 @@ def search(request, info_provided):
             customer_id = searched_customers[0].id
             request.session["customer"] = customer_id
         
-        context = {
-            'searched_customers': searched_customers
-        }
+            context = {
+                'searched_customers': searched_customers
+            }
 
-        return render(request, 'customer-list.html', context)
+            return render(request, 'customer-list.html', context)
+        else:
+            request.session["error_no_customer"] = "No customer exists. Please try again"
+            return render(request, 'customer-list.html')
+
 
 @validate_request
 def maintain_users(request, logged_user):

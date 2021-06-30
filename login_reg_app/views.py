@@ -26,8 +26,6 @@ def log_in(request):
                     request.session['user'] = logged_in_user.first_name
 
                     return redirect('/customer')
-                else:
-                    print("Incorrect password")
         except:
             print("No email was found")
         

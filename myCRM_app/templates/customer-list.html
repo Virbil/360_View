@@ -21,4 +21,8 @@
         {% endfor %}
     </table>
 </div>
+{% else %}
+<div class="container" style="color: red;">
+    <p class="lead">{{ request.session.error_no_customer }}</p>
+</div>
 {% endif %}

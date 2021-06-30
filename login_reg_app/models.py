@@ -13,11 +13,16 @@ class User_Manager(models.Manager):
     def sign_in_validator(self, post_data):
         errors = {}
         if len(post_data["email"]) < 2:
-            errors["email"] = "Please provide a longer email"
+            errors["email"] = "Please provide a valid email address"
         try:
             user = User.objects.filter(email = post_data["email"])
+            if user:
+                logged_in_user = user[0]
+                if not bcrypt.checkpw(post_data["password"].encode(), logged_in_user.password.encode()):
+                    errors["password"] = "Incorrect password. Please try again"
+            
             if not user:
-                errors["email"] = "Invalid email. Please try again"
+                errors["email"] = f"{post_data['email']} does not exist. Please provide another email"
         except:
             errors["email"] = "Invalid email. Please try again"
 
