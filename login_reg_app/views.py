@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from .models import User
 import datetime as dt
@@ -29,6 +30,44 @@ def log_in(request):
         except:
             print("No email was found")
         
+    return redirect('/')
+
+def get_email(request):
+    try:
+        user = User.objects.filter(email = request.POST["user-email"])
+        if user:
+            user_to_reset_pass = user[0]
+
+            context = {
+                'user':user_to_reset_pass
+            }
+            return render(request, 'reset-pass-modal.html', context)
+        else:
+            print("No email found. Try again.")
+    except:
+        print("No email found. Try again.")
+        
+    return redirect('/')
+
+def reset_password(request, user_id):
+    user_to_reset_pass = User.objects.get(id = user_id)
+    print(user_to_reset_pass)
+    password = request.POST['password']
+    confirm_pass = request.POST['confirm_password']
+
+    if password == confirm_pass:
+        pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+        user_to_reset_pass.password = pw_hash
+        user_to_reset_pass.save()
+
+        request.session['userid'] = user_to_reset_pass.id
+        request.session['user'] = user_to_reset_pass.first_name
+
+        return redirect('/customer')
+    else:
+        print("passwords don't match, please try again")
+
     return redirect('/')
 
 def register(request):
