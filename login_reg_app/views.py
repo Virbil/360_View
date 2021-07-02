@@ -43,15 +43,14 @@ def get_email(request):
             }
             return render(request, 'reset-pass-modal.html', context)
         else:
-            print("No email found. Try again.")
+            return HttpResponse("Email address not found. Please provide another.")
     except:
-        print("No email found. Try again.")
+        return HttpResponse("Email address not found")
         
     return redirect('/')
 
 def reset_password(request, user_id):
     user_to_reset_pass = User.objects.get(id = user_id)
-    print(user_to_reset_pass)
     password = request.POST['password']
     confirm_pass = request.POST['confirm_password']
 
@@ -64,11 +63,10 @@ def reset_password(request, user_id):
         request.session['userid'] = user_to_reset_pass.id
         request.session['user'] = user_to_reset_pass.first_name
 
-        return redirect('/customer')
+        return HttpResponse("Success")
     else:
-        print("passwords don't match, please try again")
+        return HttpResponse("Passwords don't match, please try again")
 
-    return redirect('/')
 
 def register(request):
     return render(request, "register.html")
@@ -92,6 +90,11 @@ def reg_me(request):
             birthday = dt.datetime.strptime(request.POST["birthday"], "%m/%d/%Y"),
             password = pw_hash
         )
+        
+        user_list = User.objects.all()
+        if len(user_list) <= 1:
+            new_user.user_type = "admin"
+            new_user.save()
 
         request.session["user"] = new_user.first_name
         request.session["userid"] = new_user.id

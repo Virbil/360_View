@@ -9,6 +9,14 @@
 
     <div class="collapse navbar-collapse" id="topNav">
         <ul class="navbar-nav mr-auto">
+            {% if user_info.user_type == "admin" %}
+            <li class="nav-item">
+                <a class="nav-link" id="home_flush" href="/customer/maintenance">
+                    <span data-feather="tool"></span>
+                    User Maintenance
+                </a>
+            </li>
+            {% endif %}
             <li class="nav-item active forSmOnly">
                 <a class="nav-link" id="home_flush" href="/customer">
                     <span data-feather="users"></span>

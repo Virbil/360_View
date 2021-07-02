@@ -1,14 +1,6 @@
 <nav class="col-md-2 d-none d-md-block bg-light sidebar text-left">
     <div class="sidebar-sticky">
         <ul class="nav flex-column mt-5">
-            {% if user_info.user_type == "admin" %}
-            <li class="nav-item">
-                <a class="nav-link" id="home_flush" href="/customer/maintenance">
-                    <span data-feather="tool"></span>
-                    Customer Maintenance
-                </a>
-            </li>
-            {% endif %}
             <li class="nav-item">
                 <a class="nav-link active" id="home_flush" href="/customer">
                     <span data-feather="users"></span>
