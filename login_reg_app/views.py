@@ -32,6 +32,7 @@ def log_in(request):
         
     return redirect('/')
 
+
 def get_email(request):
     try:
         user = User.objects.filter(email = request.POST["user-email"])

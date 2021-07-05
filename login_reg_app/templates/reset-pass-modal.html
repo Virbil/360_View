@@ -1,7 +1,7 @@
 <!-- Reset Password Modal -->
 <!-- Transfered from Enter Email Modal -->
-<div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header modal-header-colored">
                 <h3 class="modal-title" style="color: red;">Enter a new password.</h3>
@@ -28,7 +28,7 @@
                     </div>
                     <h4 class='lead' style="color: red;">Are you sure you want to reset your password?</h4>
                     <button class='btn btn-primary' type='submit'>Yes</button>
-                    <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
+                    <button class='btn btn-secondary' id="closeReset" type='button' data-dismiss='modal'>Cancel</button>
                 </form>
             </div>
         </div>

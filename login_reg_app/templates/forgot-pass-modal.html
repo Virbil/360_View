@@ -9,7 +9,7 @@
                 <div class="modal-body">
                     <div id="getEmailErrors" style="color: red;"></div>
                     <h2 class="lead text-left">Enter your email address.</h2>
-                    <form action="get-email" method="POST" autocomplete="off" id="getEmailForm"> <!-- Could be GET? -->
+                    <form action="get-email" method="POST" autocomplete="off" id="getEmailForm">
                         {% csrf_token %}
                         <div class="form-group row">
                             <div class="input-group-prepend col-sm-4">

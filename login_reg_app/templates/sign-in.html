@@ -23,9 +23,9 @@
             
             {% if messages %}
             <ul class="messages text-danger">    
-                {% for message in messages %}    
-                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
-                {% endfor %}
+                {% for message in messages %}    
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                {% endfor %}
             </ul>
             {% endif %}
             
@@ -51,7 +51,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
             $('#btnForgotPassword').click(function() {
                 $('#forgotPasswordModal').modal('toggle');
@@ -66,6 +66,7 @@
                     method: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
+                        console.log(response)
                         if (response == "Email address not found. Please provide another.") {
                             // using jQuery
                             $('#getEmailErrors').html(response)
@@ -81,7 +82,7 @@
             })
 
             //resetPasswordForm is getting loaded after initial page load (dynamic html)
-            $('html').on('submit', '#resetPasswordModal', function(e) {
+            $('body').on('submit', '#resetPasswordForm', function(e) {
                 e.preventDefault();
     
                 $.ajax({
@@ -89,6 +90,7 @@
                     method: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
+                        console.log(response)
                         if (response == "Passwords don't match, please try again") {
                             // using jQuery
                             $('#resetPassErrors').html(response)
@@ -101,7 +103,6 @@
 
                 $(".closeModal").click(function(){
                     $("#resetPasswordModal").modal('hide');
-                    $('#resetPasswordModal').modal('toggle');
                 });
             })            
         })
