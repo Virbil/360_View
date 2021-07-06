@@ -70,6 +70,11 @@ img {
     text-transform: uppercase;
 }
 
+.bold {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 .footer {
     position: absolute;
     bottom: 0;

@@ -45,16 +45,16 @@
                     <h1 class="heading mb-3">Customer Info</h1>
                     <div class="row text-left">
                         <div class="col mt-5">
-                            <h5>Info about {{ customer.first_name }} {{ customer.last_name }}</h5>            
-                            <h5>Email: {{ customer.email }}</h5>            
-                            <h5>Phone Number: {{ customer.phone_number }}</h5>
+                            <h5>Info about <span class="bold">{{ customer.first_name }} {{ customer.last_name }}</span></h5>            
+                            <h5>Email: <span class="bold">{{ customer.email }}</span></h5>            
+                            <h5>Phone Number: <span class="bold">{{ customer.phone_number }}</span></h5>
                             <!-- Button trigger modal -->
                             <h5 class="mt-4">Edit Customer Info <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#editCustInfoModal">Edit</button></h5>
                         </div>
                         <div class="col mt-5">
-                            <h5># of orders: {{ orders|length }}</h5>
-                            <h5>Your most recent order number: {{ orders.last.id }}</h5>
-                            <h5>Most recent order placed on: {{ orders.last.updated_at| date:'F d, Y' }}</h5>
+                            <h5># of orders: <span class="bold">{{ orders|length }}</span></h5>
+                            <h5>Your most recent order number: <span class="bold">{{ orders.last.id }}</span></h5>
+                            <h5>Most recent order placed on: <span class="bold">{{ orders.last.updated_at| date:'F d, Y' }}</span></h5>
                             <h5 class="mt-4"><a href="/customer/contact-history">Recent contact message</a></h5>
                         </div>
                     </div>

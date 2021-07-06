@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-8">
                                 {% for product in products %}
-                                <div class="input-group">
+                                <div class="input-group checkboxArray">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <input type="checkbox" name="products" aria-label="{{ product.title }}" value="{{ product.id }}">
@@ -48,7 +48,7 @@
                         </div>
                     </form>
                     <!-- Button trigger modal -->
-                    <button class="btn btn-primary mb-5" type="submit" data-toggle="modal" data-target="#placeOrderModal">Place Order</button>
+                    <button class="btn btn-primary mb-5" id="order-check" type="submit" data-toggle="modal" data-target="#placeOrderModal">Place Order</button>
                 </div>
                 
                 <!-- Modal -->
@@ -61,6 +61,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+                            <div class="m-2" id="error" style="color: red;"></div>
                             <div class="modal-body">
                                 Selecting "Place Order" will charge the customer!
                             </div>
@@ -92,9 +93,31 @@
     <script>
         feather.replace()
 
-        $('.place_order').click(function() {
-            $('#order').submit()
+        $(document).ready(function(){
+            $('#order-check').click(function() {
+                var $atLeastOneIsChecked = $('input[name="products"]:checked');                
+                var count = 0;
+                
+                $atLeastOneIsChecked.each(function() {
+                    if ($atLeastOneIsChecked.length > 0) {
+                        count = $atLeastOneIsChecked.length;
+                    }
+                })
+                
+                if (count > 0){
+                    $('#error').remove();
+
+                    $('.place_order').click(function() {
+                        $('#order').submit()
+                    })
+                } else {
+                    $('#error').html("Must choose at least one product.");
+                    
+                    document.getElementById('order').reset();
+                }                
+            })
         })
+
     </script>
 
 </body>
