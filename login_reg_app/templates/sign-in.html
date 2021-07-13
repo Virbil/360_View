@@ -54,7 +54,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#btnForgotPassword').click(function() {
-                $('#forgotPasswordModal').modal('toggle');
+                $("#forgotPasswordModal").addClass('fade');
+                $('#forgotPasswordModal').modal('show');
             })
 
 
@@ -72,8 +73,11 @@
                             $('#getEmailErrors').html(response)
                         }
                         else{
+                            $("#forgotPasswordModal").removeClass('fade');
                             $('#forgotPasswordModal').modal('hide');
-                            $("#results").html(response)
+                            // $(".modal-backdrop").hide();
+
+                            $("#results").html(response);
 
                             $('#resetPasswordModal').modal('show');
                         }
@@ -90,7 +94,7 @@
                     method: 'POST',
                     data: $(this).serialize(),
                     success: function(response) {
-                        console.log(response)
+                        // console.log(response)
                         if (response == "Passwords don't match, please try again") {
                             // using jQuery
                             $('#resetPassErrors').html(response)
@@ -101,9 +105,12 @@
                     }
                 })
 
-                $(".closeModal").click(function(){
-                    $("#resetPasswordModal").modal('hide');
-                });
+                // $(".closeModal").click(function(){
+                //     $("#resetPasswordModal").modal('hide');
+                // });
+                // $("#closeReset").click(function(){
+                //     $("#resetPasswordModal").modal('hide');
+                // });
             })            
         })
     </script>
